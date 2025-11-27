@@ -3,7 +3,6 @@ package com.ga.homeworks;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -18,38 +17,44 @@ public class Main {
 
     private <E> void printList(List<E> list) {
         // TODO Print out all the elements in the supplied list:
+        list.forEach(System.out::println);
 
     }
 
     public void getEmployeesOver50k() {
         // TODO Print a list of all employees that earn $50,000 or more
-        List<Employee> employees = null;
-        // printList(employees);
+        List<Employee> employees = this.employees.stream().filter(employee -> employee.getSalary() > 50_000).toList();
+        printList(employees);
     }
 
     public void getEmployeeNamesHiredAfter2012() {
-        // TODO Print a list of the names (not the Employee instances) of all employees who were hired on or after Jan. 1, 2012:
+        // TODO Print a list of the names (not the Employee instances) of all employees who were hired on or after
+        //  Jan. 1, 2012:
         // HINT: look it up for "LocalDate.of"
-        List<String> employees = null;
-        // printList(employees);
+        List<String> employees =
+                this.employees.stream().filter(employee -> employee.getHireDate().isAfter(LocalDate.of(2012, 1, 1)) || employee.getHireDate().isEqual(LocalDate.of(2012, 1, 1))).map(Employee::getName).toList();
+        printList(employees);
     }
 
     public void getMaxSalary() {
         // TODO Print the maximum salary of all employees...
-        double max = 0;
+        double max =
+                this.employees.stream().map(Employee::getSalary).max(Double::compareTo).orElseGet(() -> 0d);
         System.out.println("Max:" + max);
     }
 
     public void getMinSalary() {
         // TODO Print the minimum salary of all employees...
-        double min = 0;
+        double min = this.employees.stream().map(Employee::getSalary).min(Double::compareTo).orElseGet(() -> 0d);
         System.out.println("Min:" + min);
     }
 
     public void getAverageSalaries() {
         // TODO print the average salary of all Female and Male employees:
-        double averageFemale = 0;
-        double averageMale = 0;
+        double averageFemale =
+                this.employees.stream().filter(employee -> employee.toString().contains("gender=Female")).mapToDouble(Employee::getSalary).average().orElseGet(()-> 0d);
+        double averageMale =
+                this.employees.stream().filter(employee ->  employee.toString().contains("gender=Male")).mapToDouble(Employee::getSalary).average().orElseGet(() -> 0d);
 
         System.out.println("Averages: Female:" + averageFemale);
         System.out.println("Averages: Male:" + averageMale);
@@ -57,11 +62,18 @@ public class Main {
 
     public void getMaximumPaidEmployee() {
         // TODO use the reduce() operation to find the Employee instance of the employees list with the highest salary:
-        Employee highest = null;
-        // System.out.println(highest);
+        Employee highest =
+                this.employees.stream().reduce((employee, employee2) ->  employee.getSalary() > employee2.getSalary() ? employee : employee2).orElseGet(() -> null);
+         System.out.println(highest);
     }
 
     public static void main(String[] args) {
-
+        Main main = new Main();
+        main.getEmployeesOver50k();
+        main.getEmployeeNamesHiredAfter2012();
+        main.getMaxSalary();
+        main.getMinSalary();
+        main.getAverageSalaries();
+        main.getMaximumPaidEmployee();
     }
 }

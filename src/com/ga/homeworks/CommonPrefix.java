@@ -1,9 +1,27 @@
 package com.ga.homeworks;
 
+import java.util.Arrays;
+
 public class CommonPrefix {
 
     public static String longestCommonPrefix(String[] words) {
-        return null;
+        StringBuilder prefix = new StringBuilder();
+        if (words.length == 0) {
+            return "";
+        }
+        int lastProcessedCharIndex = 0;
+        String firstWord = words[0];
+        while (firstWord.length() > lastProcessedCharIndex) {
+            prefix.append(firstWord.charAt(lastProcessedCharIndex));
+            lastProcessedCharIndex++;
+            boolean prefixIsCommon = Arrays.stream(words).allMatch(word -> word.contains(firstWord));
+            if (!prefixIsCommon && lastProcessedCharIndex == 0) {
+                return "";
+            } else if (!prefixIsCommon) {
+                return prefix.toString();
+            }
+        }
+        return prefix.toString();
     }
 
     public static void main(String[] args) {
