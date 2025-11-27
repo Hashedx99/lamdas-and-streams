@@ -13,13 +13,13 @@ public class CommonPrefix {
         String firstWord = words[0];
         while (firstWord.length() > lastProcessedCharIndex) {
             prefix.append(firstWord.charAt(lastProcessedCharIndex));
-            lastProcessedCharIndex++;
-            boolean prefixIsCommon = Arrays.stream(words).allMatch(word -> word.contains(firstWord));
+            boolean prefixIsCommon = Arrays.stream(words).allMatch(word -> word.startsWith(prefix.toString()));
             if (!prefixIsCommon && lastProcessedCharIndex == 0) {
                 return "";
             } else if (!prefixIsCommon) {
                 return prefix.toString();
             }
+            lastProcessedCharIndex++;
         }
         return prefix.toString();
     }
